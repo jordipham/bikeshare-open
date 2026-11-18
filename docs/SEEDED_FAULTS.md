@@ -78,3 +78,28 @@ exit=2
 ```
 
 **Agent turns to fix:** 4 (ran `make test`, read `src/features.py`, edited line 16, re-ran `make test`: 15 passed). Its fix added `"BAD": 2` but kept a dead `"STORM": 3` label, and its summary quoted a CLAUDE.md line that does not exist. I restored the original mapping.
+
+## Fault 4 (unseen by the hook): Bash `cp` into `data/raw/`
+
+**Change:** overwrite the raw data with a copy missing its last row, as an agent re-downloading or copying data might:
+```
+cp /tmp/raw_bad.csv data/raw/bike_daily.csv
+```
+
+**What happened:** the hook stayed silent (`hook exit=0`; in real use it does not run at all, because `.claude/settings.json` only triggers it for Edit|Write), and the permission deny rules do not cover Bash. All tests still passed with a day of data missing:
+```
+15 passed in 1.60s
+```
+Only the file hash (`0c437d8d...` instead of `a6bed157...`) and `git status` (` M data/raw/bike_daily.csv`) revealed it.
+
+**What catches it (implemented):**
+1. `tests/test_contract.py::test_raw_data_unchanged` asserts the raw file's SHA-256. With the bad copy in place:
+```
+FAILED tests/test_contract.py::test_raw_data_unchanged - AssertionError: raw ...
+1 failed, 15 passed in 1.56s
+```
+2. `chmod a-w data/raw/bike_daily.csv` makes the file read-only, so a plain `cp` onto it fails with "Permission denied" before anything changes.
+
+## Additional finding: a fault the suite missed
+
+Removing the `reindex_to_calendar(...)` call in `build_features` (the Step 5 calendar-gap bug) left all 15 tests green and the hook at `exit=0`. `test_lags_are_true_calendar_lags` only checks days whose previous calendar day exists in the raw data, so it skips 2011-03-11, the one row the bug breaks. The test is named for this bug but cannot detect it.
