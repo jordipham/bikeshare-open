@@ -55,3 +55,24 @@ exit=2
 ```
 
 **Agent turns to fix:** 5 (ran `make test`, read `src/features.py` and `src/config.py`, edited, re-ran `make test`: 15 passed). Its fix used `rolling(LAG_WARMUP, closed="left")`: same values (ridge valid R^2 0.6853) but breaks the CLAUDE.md rule to `.shift(1)` before aggregating, so I restored `.shift(1).rolling(...)`.
+
+## Fault 3: weather label renamed (BAD -> STORM)
+
+**Change** (`src/features.py`):
+```diff
+```
+
+**`make test` (red):**
+```
+E           ValueError: unmapped weather labels: ['BAD']
+E           ValueError: unmapped weather labels: ['BAD']
+E           ValueError: unmapped weather labels: ['BAD']
+```
+
+**Hook stderr (exit 2):**
+```
+8 errors in 0.29s
+exit=2
+```
+
+**Agent turns to fix:** TBD

@@ -13,7 +13,7 @@ import pandas as pd
 from src.config import FORBIDDEN, LAG_WARMUP, PROCESSED, TARGET
 from src.ingest import load_raw
 
-WEATHER_ORDER = {"GOOD": 0, "MISTY": 1, "BAD": 2}
+WEATHER_ORDER = {"GOOD": 0, "MISTY": 1, "STORM": 2}
 
 
 def encode_weather(series: pd.Series) -> pd.Series:
