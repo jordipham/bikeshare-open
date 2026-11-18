@@ -60,13 +60,15 @@ exit=2
 
 **Change** (`src/features.py`):
 ```diff
+-WEATHER_ORDER = {"GOOD": 0, "MISTY": 1, "BAD": 2}
++WEATHER_ORDER = {"GOOD": 0, "MISTY": 1, "STORM": 2}
 ```
 
 **`make test` (red):**
 ```
 E           ValueError: unmapped weather labels: ['BAD']
-E           ValueError: unmapped weather labels: ['BAD']
-E           ValueError: unmapped weather labels: ['BAD']
+ERROR tests/test_split.py::test_no_overlapping_dates - ValueError: unmapped w...
+2 passed, 13 errors in 1.61s
 ```
 
 **Hook stderr (exit 2):**
@@ -75,4 +77,4 @@ E           ValueError: unmapped weather labels: ['BAD']
 exit=2
 ```
 
-**Agent turns to fix:** TBD
+**Agent turns to fix:** 4 (ran `make test`, read `src/features.py`, edited line 16, re-ran `make test`: 15 passed). Its fix added `"BAD": 2` but kept a dead `"STORM": 3` label, and its summary quoted a CLAUDE.md line that does not exist. I restored the original mapping.

@@ -19,3 +19,4 @@ Agents append here via the `/new-feature` skill; you append here by hand.
 - 2026-11-17: Seed fault 2 (Exercise 2): break a lag feature in `src/features.py` (details in docs/SEEDED_FAULTS.md). Leakage tests turn red (1 failed) and the hook exits 2.
 - 2026-11-17: Fix fault 2: restore `.shift(1)` before the 7-day rolling mean. Agent fixed it in 5 turns with `closed="left"` (equivalent values) but I kept `.shift(1)` per the CLAUDE.md rule.
 - 2026-11-17: Seed fault 3 (Exercise 2): break the weather encoding in `src/features.py` (details in docs/SEEDED_FAULTS.md). Tests error (13) and the hook exits 2.
+- 2026-11-17: Fix fault 3: restore `WEATHER_ORDER` to GOOD/MISTY/BAD. Agent fixed it in 4 turns but left a dead `STORM` label and cited a non-existent CLAUDE.md line; I restored the original.
