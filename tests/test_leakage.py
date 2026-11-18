@@ -64,3 +64,14 @@ def test_no_missing_values(feats):
 def test_dates_are_sorted_and_unique(feats):
     assert feats.dteday.is_monotonic_increasing
     assert feats.dteday.is_unique
+
+
+def test_hum_cnt_lag_1_on_named_date(feats):
+    """New feature hum_cnt_lag_1 = today's hum x yesterday's cnt.
+
+    Hand-computed from data/raw/bike_daily.csv:
+    hum on 2011-06-15 = 47.1667, cnt on 2011-06-14 = 4891,
+    47.1667 * 4891 = 230692.3297.
+    """
+    row = feats.loc[feats.dteday == pd.Timestamp("2011-06-15")].iloc[0]
+    assert row["hum_cnt_lag_1"] == pytest.approx(230692.3297)
