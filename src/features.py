@@ -75,6 +75,12 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
     out["cnt_lag_7"] = out[TARGET].shift(LAG_WARMUP)
     out["cnt_roll_7"] = out[TARGET].shift(1).rolling(LAG_WARMUP).mean()
 
+    # --- Humidity interaction: daily humidity (same-day, measured at prediction
+    # time) × lagged demand. This tests if humidity matters more when demand
+    # is already high (e.g., humid days might see lower demand due to heat
+    # discomfort). hum is same-day weather, so available to a forecaster.
+    out["hum_cnt_lag_1"] = out["cnt_lag_1"] * out["hum"]
+
     return out.dropna().reset_index(drop=True)
 
 
