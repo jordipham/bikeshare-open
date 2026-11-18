@@ -14,3 +14,4 @@ Agents append here via the `/new-feature` skill; you append here by hand.
 - 2026-11-17: Keep a denylist (`FORBIDDEN`) over an allowlist. This means I accept the failure that a new raw column can enter features silently, but in the end, it will be handled by `tests/test_contract.py` (will be made later) which flags any column not classified in `src/config.py`.
 
 - 2026-11-17: Add `hum_cnt_lag_1` = same-day `hum` x `cnt_lag_1` via /new-feature. What was available at prediction time: today's weather and yesterday's count. Validation R^2 ridge 0.6475 -> 0.6853 (+0.038), hgb 0.2185 -> 0.1343 (-0.084). Kept (ridge gain > 0.01); hgb worsens because trees cannot extrapolate the interaction. Replaced the agent's tautological test with a hand-computed value on 2011-06-15.
+- 2026-11-17: Seed fault 1 (Exercise 2): `cnt_lag_1` uses `shift(0)` (today's count). Leakage tests turn red (3 failed) and the hook exits 2.
