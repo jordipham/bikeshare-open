@@ -68,3 +68,20 @@ def test_raw_data_unchanged():
     assert digest == "a6bed1577f6e4de56dcfae6d8315985073cc0ad3446c8c99ed60c86a0b5ad9dc", (
         f"raw data changed: sha256 {digest[:16]}"
     )
+
+
+def test_every_raw_column_is_classified():
+    """Every raw column except `dteday` is in exactly one set in src/config.py.
+    Backs the denylist choice: a new raw column cannot silently enter features."""
+    from pathlib import Path
+
+    import pandas as pd
+
+    from src.config import FORBIDDEN, RAW_INPUT_COLS
+
+    raw = Path(__file__).resolve().parents[1] / "data" / "raw" / "bike_daily.csv"
+    raw_cols = set(pd.read_csv(raw, nrows=0).columns) - {"dteday"}
+    unclassified = raw_cols - FORBIDDEN - RAW_INPUT_COLS
+    assert not unclassified, f"unclassified raw columns: {sorted(unclassified)}"
+    both = FORBIDDEN & RAW_INPUT_COLS
+    assert not both, f"columns both forbidden and allowed: {sorted(both)}"

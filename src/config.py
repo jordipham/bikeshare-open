@@ -45,6 +45,12 @@ UNVERIFIED_COLS = {"cnt_2d_bfr"}
 # What feature_columns() and the tests actually enforce.
 FORBIDDEN = LEAKAGE_COLS | TIME_INDEX_COLS | UNVERIFIED_COLS
 
+# 4. Inputs: raw columns the feature builder may use (directly or encoded).
+#    Every raw column except `dteday` must be in exactly one set above or here;
+#    tests/test_contract.py fails on any column nobody has classified.
+RAW_INPUT_COLS = {"season", "mnth", "holiday", "weekday", "temp", "atemp", "hum",
+                  "windspeed", "workday", "weather"}
+
 # Temporal split: train on 2011, validate on H1 2012, test on H2 2012.
 TRAIN_END = "2011-12-31"
 VALID_END = "2012-06-30"
