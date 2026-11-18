@@ -1,0 +1,6 @@
+test  none      ridge r2=0.5997 mae=916.4
+test  none      hgb   r2=-0.8198 mae=2173.5
+test  log1p     ridge r2=-0.6964 mae=1839.4
+test  log1p     hgb   r2=-0.8698 mae=2208.7
+test  diff_lag1 ridge r2=0.6033 mae=907.9
+test  diff_lag1 hgb   r2=0.2741 mae=1272.4
