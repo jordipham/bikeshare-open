@@ -15,3 +15,4 @@ Agents append here via the `/new-feature` skill; you append here by hand.
 
 - 2026-11-17: Add `hum_cnt_lag_1` = same-day `hum` x `cnt_lag_1` via /new-feature. What was available at prediction time: today's weather and yesterday's count. Validation R^2 ridge 0.6475 -> 0.6853 (+0.038), hgb 0.2185 -> 0.1343 (-0.084). Kept (ridge gain > 0.01); hgb worsens because trees cannot extrapolate the interaction. Replaced the agent's tautological test with a hand-computed value on 2011-06-15.
 - 2026-11-17: Seed fault 1 (Exercise 2): `cnt_lag_1` uses `shift(0)` (today's count). Leakage tests turn red (3 failed) and the hook exits 2.
+- 2026-11-17: Fix fault 1: restore `cnt_lag_1` to `shift(1)`. Agent took 3 turns; tests green (15 passed).

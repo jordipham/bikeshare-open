@@ -27,4 +27,4 @@ FAILED tests/test_leakage.py::test_hum_cnt_lag_1_on_named_date - assert np.fl...
 exit=2
 ```
 
-**Agent turns to fix:** TBD
+**Agent turns to fix:** 3 (ran `make test`, read `src/features.py`, edited line 74 back to `shift(1)`). It found the bug partly from the seed commit message, did not re-run `make test` to verify, and then tried to change the named-date test expectation (stopped).
