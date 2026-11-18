@@ -28,3 +28,30 @@ exit=2
 ```
 
 **Agent turns to fix:** 3 (ran `make test`, read `src/features.py`, edited line 74 back to `shift(1)`). It found the bug partly from the seed commit message, did not re-run `make test` to verify, and then tried to change the named-date test expectation (stopped).
+
+## Fault 2: 7-day rolling mean includes today
+
+**Change** (`src/features.py`):
+```diff
+-    out["cnt_roll_7"] = out[TARGET].shift(1).rolling(LAG_WARMUP).mean()
++    out["cnt_roll_7"] = out[TARGET].rolling(LAG_WARMUP).mean()
+```
+
+**`make test` (red):**
+```
+E             comparison failed
+FAILED tests/test_leakage.py::test_rolling_mean_excludes_today - assert np.fl...
+1 failed, 14 passed in 1.65s
+```
+
+**Hook stderr (exit 2):**
+```
+
+tests/test_leakage.py:57: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_rolling_mean_excludes_today - assert np.fl...
+1 failed, 7 passed in 0.28s
+exit=2
+```
+
+**Agent turns to fix:** TBD
